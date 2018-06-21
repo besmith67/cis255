@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+
+<form action="https://github.com/besmith67/cis255">
+		<input type="submit" value="Go to Github" />
+</form>
+
+<h1>The XMLHttpRequest Object</h1>
+
+<p id="demo">Let AJAX change this text.</p>
+
+<button type="button" onclick="showByRoom(obj);">Change Content</button>
+<button type="button" onclick="showDoc(obj);">Change Content2</button>
+
+<script>
+rt = " ";
+function loadDoc() {
+  
+$(document).ready(function(){
+    $("button").click(function(){
+        $.ajax({url: "junk.txt", success: function(result){
+            $("#div1").html(result);
+        }});
+    });
+});
+
+function showDoc(obj){
+  xx = "";
+    for(var i =0; i < obj.courses.length ; i++) 
+        xx = xx + obj.courses[i].prefix + " " 
+	         + obj.courses[i].courseNumber + " " 
+			 + obj.courses[i].meetingTimes[0].building + " " 
+			 + obj.courses[i].meetingTimes[0].room +" <br>";
+    document.getElementById("demo").innerHTML = xx;
+};
+function sortByRoom(obj){
+  newArray = [];
+  newArray = obj.courses.slice();
+  newArray.sort((function(a, b){return a.room - b.room}));
+  return newArray;
+};
+function showByRoom(obj){
+  xx = "";
+  sortByRoom(obj);
+    for(var i = 0; i < newArray.courses.length ; i++) 
+        xx = xx + newArray.courses[i].prefix + " " 
+	         + newArray.courses[i].courseNumber + " " 
+			 + newArray.courses[i].meetingTimes[0].building + " " 
+			 + newArray.courses[i].meetingTimes[0].room +" <br>";
+    document.getElementById("demo").innerHTML = xx;
+};
+
+
+
+</script>
+
+</body>
+</html>
