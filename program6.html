@@ -2,7 +2,7 @@
 <html lang = "en">
 <head>
 	<!-- Title -->
-	<title>Branden Smith - Assignment 5</title>
+	<title>Branden Smith - Assignment 6</title>
 	
 	<!-- MetaData -->
 	<meta charset="utf-8" />
@@ -21,12 +21,11 @@
 			<input type="submit" value="Go to Github" />
 	</form>
 
-	<h1>The XMLHttpRequest Object</h1>
+	<h1>JQuery - Assignment 6</h1>
 
 	<p id="demo">Let AJAX change this text.</p>
 
-	<button type="button" onclick="showByRoom(obj);">Change Content</button>
-	<button id = "load" type="button" onclick="showDoc();">Load</button>
+	<button id = "change" type="button" onclick="showByRoom(obj);">Change Content</button>
 
 	<p>I believe the same origin policy for jQuery is a good idea because of the security it implements.
 	Yes, it sometimes can be annoying and you have to do different workarounds like in this assignment, but I think security is more important.
@@ -35,17 +34,19 @@
 	<hr />
 	<p>In Javascript, functions are treated as type Object. A callback function is a function that can be passed as an argument of another function
 	 and can be executed later inside that other function. Callback functions are very useful in Javascript. For alternating colors for a list, however, 
-	 it is a lot easier to just select all odd, or even, listed numbers with the jQuery selector: ("li:even") and change the css background color.</p>
+	 it is a lot easier in my opinion to just select all odd, or even, listed numbers with the jQuery selector: ("li:even") and change the css background color of the list, or table, items.</p>
 
 	<script>
 		rt = " ";
 		 
 		$(document).ready(function(){
-			$("#load").click(function(){
+			$("#change").hover(function(){
 				$.ajax({url: "junk.txt", success: function(result){
 					//$("#demo").html(result);
 					rt = result;
-					obj = JSON.parse(rt);
+					obj = jQuery.parseJSON(rt);
+					//jQuery.parseJSON(rt); 
+					//JSON.parse(rt);
 				}});
 			});
 		});
@@ -72,17 +73,19 @@
 		function showByRoom(obj){
 			sortByRoom(obj);
 
-			na = $.map(newArray, function(n) {
+			na = $.map(newArray, function(n, i) {
 				li = document.createElement('li');
 				li.innerHTML = n.prefix + " " 
 					 + n.courseNumber + " " 
 					 + n.meetingTimes[0].building + " " 
 					 + n.meetingTimes[0].room;
+					 if (((i + 1)%2) != 0) {
+						$(li).css("background-color", "yellow");
+					 };
 				return li;	
 			});
-		 
-			$("#demo").append(na);
-			$("#demo").children(":even").css("background-color", "yellow");
+			
+			$("#demo").html(na);
 		};
 
 

@@ -1,67 +1,96 @@
 <!DOCTYPE html>
-<html>
+<html lang = "en">
+<head>
+	<!-- Title -->
+	<title>Branden Smith - Assignment 5</title>
+	
+	<!-- MetaData -->
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="author" content="Branden Smith" />
+	<meta name="contact" content="besmith2@svsu.edu" />
+	<meta name="copyright" content="Branden Smith" />
+	<meta name="description" content="CIS 255 Assignment 2" />
+	
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
 <body>
 
+	<form action="https://github.com/besmith67/cis255">
+			<input type="submit" value="Go to Github" />
+	</form>
 
-<h1>The XMLHttpRequest Object</h1>
+	<h1>JQuery - Assignment 6</h1>
 
-<p id="demo">Let AJAX change this text.</p>
+	<p id="demo">Let AJAX change this text.</p>
 
-<button type="button" onclick="showByRoom(obj);">Change Content</button>
-<button type="button" onclick="loadDoc();">Load</button>
+	<button id = "change" type="button" onclick="showByRoom(obj);">Change Content</button>
 
-<script>
-rt = " ";
-function loadDoc() {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      //document.getElementById("demo").innerHTML = this.responseText;
-      rt = this.responseText;
-      obj = JSON.parse(rt); 
-    };
-  };
-  xhttp.open("GET", "https://api.svsu.edu/courses?prefix=CIS&courseNumber=255", true);
-  xhttp.send();
-};
+	<p>I believe the same origin policy for jQuery is a good idea because of the security it implements.
+	Yes, it sometimes can be annoying and you have to do different workarounds like in this assignment, but I think security is more important.
+	One example I saw while researching the same origin policy was about if we didn't have the policy, then websites could use malicious code to
+	request access to information you have pulled up like an online bank account. Since security is such a high priority, I think the same origin policy is a good idea.</p>
+	<hr />
+	<p>In Javascript, functions are treated as type Object. A callback function is a function that can be passed as an argument of another function
+	 and can be executed later inside that other function. Callback functions are very useful in Javascript. For alternating colors for a list, however, 
+	 it is a lot easier in my opinion to just select all odd, or even, listed numbers with the jQuery selector: ("li:even") and change the css background color of the list, or table, items.</p>
 
-function sortByRoom(obj){
-  newArray = obj.courses.slice();
-  newArray.sort(compare);
-  return newArray;
-};
-function compare(a, b) {
-  
-  var roomA = a.room;
-  var roomB = b.room;
+	<script>
+		rt = " ";
+		 
+		$(document).ready(function(){
+			$("#change").hover(function(){
+				$.ajax({url: "junk.txt", success: function(result){
+					//$("#demo").html(result);
+					rt = result;
+					obj = jQuery.parseJSON(rt);
+					//jQuery.parseJSON(rt); 
+					//JSON.parse(rt);
+				}});
+			});
+		});
 
-  var comparison = 0;
-  if (roomA > roomB) {
-    comparison = 1;
-  } else if (roomA < roomB) {
-    comparison = -1;
-  }
-  return comparison;
-};
 
-function showByRoom(obj){
- sortByRoom(obj);
+		function sortByRoom(obj){
+		  newArray = obj.courses.slice();
+		  newArray.sort(compare);
+		  return newArray;
+		};
+		function compare(a, b) {
+		  
+		  var roomA = a.meetingTimes[0].room;
+		  var roomB = b.meetingTimes[0].room;
 
- na = $.map(newArray, function(n) {
-		li = document.createElement('li');
-		li.innerHTML = n.prefix + " " 
-	         + n.courseNumber + " " 
-			 + n.meetingTimes[0].building + " " 
-			 + n.meetingTimes[0].room;
-		return li;
-		
-  });
- 
-    $("#demo").append(na);
-    $("#demo").children(":even").css("background-color", "yellow");
-};
+		  var comparison = 0;
+		  if (roomA > roomB) {
+			comparison = 1;
+		  } else if (roomA < roomB) {
+			comparison = -1;
+		  }
+		  return comparison;
+		};
+		function showByRoom(obj){
+			sortByRoom(obj);
 
-</script>
+			na = $.map(newArray, function(n, i) {
+				li = document.createElement('li');
+				li.innerHTML = n.prefix + " " 
+					 + n.courseNumber + " " 
+					 + n.meetingTimes[0].building + " " 
+					 + n.meetingTimes[0].room;
+					 if (((i + 1)%2) != 0) {
+						$(li).css("background-color", "yellow");
+					 };
+				return li;	
+			});
+			
+			$("#demo").html(na);
+		};
+
+
+
+	</script>
 
 </body>
 </html>
