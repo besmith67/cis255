@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang = "en">
+
+<head>
+	<!-- Title -->
+	<title>Branden Smith - Assignment 7</title>
+	
+	<!-- MetaData -->
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="author" content="Branden Smith" />
+	<meta name="contact" content="besmith2@svsu.edu" />
+	<meta name="copyright" content="Branden Smith" />
+	<meta name="description" content="CIS 255 Assignment 7" />
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+</head>
+
+
+<body>
+	<form action="https://github.com/besmith67/cis255">
+			<input type="submit" value="Go to Github" />
+	</form>
+	<br>
+
+<div ng-app="myApp" ng-controller="myCtrl">
+
+	
+	<!--Fahrenheit To Celsius-->
+	Fahrenheit: <input type="text" ng-model="fahrenheit"><br>
+	<button ng-click="convertFC()">Convert</button><br>
+	 Celsius: <span id="output"></span>
+	
+     
+	 <!--Quadratic Formula Solver-->
+     <hr>
+     Quadratic Formula<br>
+     A: <input type="text" ng-model="quadA"><br>
+     B: <input type="text" ng-model="quadB"><br>
+     C: <input type="text" ng-model="quadC"><br>
+     x1: {{x1()}}<br>
+     x2: {{x2()}}
+	 
+     <!--Cubic Formula Solver-->
+     <hr>
+     Cubic Formula<br>
+     A: <input type="text" ng-model="cubeA"><br>
+     B: <input type="text" ng-model="cubeB"><br>
+     C: <input type="text" ng-model="cubeC"><br>
+     D: <input type="text" ng-model="cubeD"><br>
+     x1: {{cubicOutput()[0]}}<br>
+     x2: {{cubicOutput()[1]}}<br>
+     x3: {{cubicOutput()[2]}}<br>
+</div>
+
+<script>
+
+	//AngularJS Application
+	var app = angular.module('myApp', []);
+	app.controller('myCtrl', function($scope) {
+		$scope.fahrenheit = 0;
+		$scope.convertFC = function() {
+		var celsius = (5/9) * ($scope.fahrenheit - 32);
+		document.getElementById("output").innerHTML = celsius;
+	};
+		
+		$scope.quadA = 0;
+		$scope.quadB = 0;
+		$scope.quadC = 0;
+		$scope.x1 = function() {
+			return (-($scope.quadB) + Math.sqrt(($scope.quadB * $scope.quadB) - 4 * $scope.quadA * $scope.quadC) ) / (2 * $scope.quadA);
+		};
+		 $scope.x2 = function() {
+			return (-($scope.quadB) - Math.sqrt(($scope.quadB * $scope.quadB) - 4 * $scope.quadA * $scope.quadC) ) / (2 * $scope.quadA);
+		};
+		
+		$scope.cubeA = 0;
+		$scope.cubeB = 0;
+		$scope.cubeC = 0;
+		$scope.cubeD = 0;
+		//Function below is derived from: https://stackoverflow.com/questions/13328676/c-solving-cubic-equations
+		//and is modified to work with inputs
+		$scope.cubicOutput =   function cubicSolve()
+	{
+		var a = $scope.cubeA;
+		var b = $scope.cubeB;
+		var c = $scope.cubeC;
+		var d = $scope.cubeD;
+		
+		b /= a;
+		c /= a;
+		d /= a;
+		var disc, q, r, dum1, s, t, term1, r13, x1, x2, x3;
+		q = (3.0*c - (b*b))/9.0;
+		r = -(27.0*d) + b*(9.0*c - 2.0*(b*b));
+		r /= 54.0;
+		disc = q*q*q + r*r;
+		x1 = 0; //The first root is always real.
+		term1 = (b/3.0);
+		if (disc > 0) { // one root real, two are complex
+			s = r + Math.sqrt(disc);
+			s = ((s < 0) ? -Math.pow(-s, (1.0/3.0)) : Math.pow(s, (1.0/3.0)));
+			t = r - Math.sqrt(disc);
+			t = ((t < 0) ? -Math.pow(-t, (1.0/3.0)) : Math.pow(t, (1.0/3.0)));
+			x1 = -term1 + s + t;
+			term1 += (s + t)/2.0;
+			x3 = x2 = -term1;
+			term1 = Math.sqrt(3.0)*(-t + s)/2;
+			x2 = term1;
+			x3 = -term1;
+			return;
+		} 
+		// End if (disc > 0)
+		// The remaining options are all real
+		x3 = x2 = 0;
+		if (disc == 0){ // All roots real, at least two are equal.
+			r13 = ((r < 0) ? -Math.pow(-r,(1.0/3.0)) : Math.pow(r,(1.0/3.0)));
+			x1 = -term1 + 2.0*r13;
+			x3 = x2 = -(r13 + term1);
+			return;
+		} // End if (disc == 0)
+		// Only option left is that all roots are real and unequal (to get here, q < 0)
+		q = -q;
+		dum1 = q*q*q;
+		dum1 = Math.acos(r/Math.sqrt(dum1));
+		r13 = 2.0*Math.sqrt(q);
+		x1 = -term1 + r13*Math.cos(dum1/3.0);
+		x2 = -term1 + r13*Math.cos((dum1 + 2.0*Math.PI)/3.0);
+		x3 = -term1 + r13*Math.cos((dum1 + 4.0*Math.PI)/3.0);
+		return [x1,x2,x3];
+	}  //End of cubicSolve
+	   
+		
+	});
+
+</script>
+
+</body>
+</html>
